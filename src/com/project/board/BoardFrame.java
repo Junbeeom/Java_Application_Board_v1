@@ -11,6 +11,115 @@ public class BoardFrame {
         boolean flag = true;
 
         while (flag) {
+            switch (sc.nextInt()) {
+                case 1:
+                    System.out.println("제목을 입력하세요 : ");
+                    sc.nextLine();
+                    String userTitle = sc.nextLine();
+                    //sc.nextLine();
+                    //userTitle = board.titleCheck(userTitle);
+
+                    System.out.println("내용을 입력하세요 : 개행하려면 -붙이세요");
+                    String userContent = sc.nextLine();
+                    userContent = board.contentCheck(userContent);
+
+                    System.out.println("작성자 이름을 입력하세요 : ");
+                    String userName = sc.nextLine() ;
+                    userName = board.nameCheck(userName);
+                    board.registered(userTitle, userContent, userName);
+                    break;
+
+                case 2:
+                    System.out.println("제목으로 검색해서 삭제하기 1번");
+                    System.out.println("작성자로 검색해서 삭제하기 2번");
+                    switch (sc.nextInt()) {
+                        case 1:
+                            System.out.println("제목을 입력하세요");
+                            userTitle = sc.next();
+
+                            //유효성 검증 추가
+                            board.deleted();
+                            break;
+
+                        default:
+                            System.out.println("작성자의 이름을 입력하세요");
+                            userName = sc.next();
+
+                            //유효성 검증 추가
+                            board.deleted();
+                    }
+                    break;
+
+                case 3:
+                    System.out.println(" 제목  검색하기 1번");
+                    System.out.println("작성자 검색하기 2번");
+                    System.out.println(" 내용  검색하기 3번");
+
+                    switch (sc.nextInt()) {
+                        case 1:
+                            System.out.println("제목을 입력하세요");
+                            userTitle = sc.next();
+
+                            //유효성 검증 추가
+                            board.searched();
+                            break;
+
+                        case 2:
+                            System.out.println("작성자의 이름을 입력하세요");
+                            userName = sc.next();
+
+                            //유효성 검증 추가
+                            board.searched();
+                            break;
+
+                        default:
+                            System.out.println("내용을 입력하세요");
+                            userContent = sc.next();
+
+                            //유효성 검증 추가
+                            board.searched();
+                            break;
+                    }
+                    break;
+
+                case 4:
+                    System.out.println(" 제목  수정하기 1번");
+                    System.out.println("작성자 수정하기 2번");
+                    System.out.println(" 내용  수정하기 3번");
+
+                    switch (sc.nextInt()) {
+                        case 1:
+                            System.out.println("제목을 입력하세요");
+                            userTitle = sc.next();
+
+                            //유효성 검증 추가
+                            board.modified();
+                            break;
+
+                        case 2:
+                            System.out.println("작성자의 이름을 입력하세요");
+                            userName = sc.next();
+
+                            //유효성 검증 추가
+                            board.modified();
+                            break;
+
+                        default:
+                            System.out.println("내용을 입력하세요");
+                            userContent = sc.next();
+
+                            //유효성 검증 추가
+                            board.modified();
+                            break;
+                    }
+                    break;
+
+                case 5:
+                    board.listed();
+                    break;
+                default:
+                    flag = false;
+            }
         }
     }
 }
