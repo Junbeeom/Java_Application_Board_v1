@@ -11,6 +11,15 @@ public class BoardFrame {
         boolean flag = true;
 
         while (flag) {
+            System.out.println("=================");
+            System.out.println("1.게시글 작성하기");
+            System.out.println("2.게시글 삭제하기");
+            System.out.println("3.게시글 검색하기");
+            System.out.println("4.게시글 수정하기");
+            System.out.println("5.게시글 목록보기");
+            System.out.println("6.    종료");
+            System.out.println("=================");
+            
             switch (sc.nextInt()) {
                 case 1:
                     System.out.println("제목을 입력하세요 : ");
