@@ -3,87 +3,68 @@ package com.project.board;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+// 기능을 담당하고 있는 클래스임을 명시
 public class Board {
-    int contentCnt = 0;
-    int contentCntTotal = 0;
-
     public Board() {}
 
+    // hashMap -> LinkedHashMap put()된 순서를 보장해주는 자료구조로 변경
+    // key값 -> 고유 번호 -> DB(PK) -> LinkedHashMap key -> 게시글이 생성될 때 +1되는 카운트 수
+    // LinkedHashMap<String, Board(BoardData)> lhm = new LinkedHashMap<String, Board>();
+    // lhm.get(입력받은고유번호).setName("바꿀이름");
+    // lhm.get(입력받은고유번호).setDeleted(true);
+
+    // HashMap<String, Integer> hm = new HashMap<String, Integer>();
     HashMap<String, BoardData> boardDataHashMap = new HashMap<>();
     ArrayList<BoardData> boardDataArrayList = new ArrayList<>();
 
     //등록
     public void registered(String userTitle, String userContent, String userName) {
-        Scanner sc = new Scanner(System.in);
-
-        userTitle = titleCheck(userTitle);
-        userContent = contentCheck(userContent);
-        userName = nameCheck(userName);
-
         //등록 일시
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-        Date time = new Date();
-        String registrationDate = dateFormat.format(time);
+        // created 등으로 변수명 일치시키기
+        String registrationDate = dateFormat.format(new Date());
 
+        // 고유번호 생성
+
+        // lhm.put(고유번호, new Board(제목, 내용, 이름, 등록시간, 수정시간(null, "없음", "-"), 삭제여부(false)));
         boardDataHashMap.put(userTitle, new BoardData(userTitle, userContent, userName, registrationDate, "없음"));
         boardDataArrayList.add(new BoardData(userTitle, userContent, userName, registrationDate, "없음"));
 
-        System.out.println();
-        System.out.println(userName + "의 게시글 등록이 완료 되었습니다. ");
-        System.out.println("등록일시 : " +  registrationDate);
-
-        contentCnt++;
-        contentCntTotal++;
-        if(contentCnt > 3) {
-            contentCnt = 3;
-        }
-
+        System.out.println("\n" + userName + " 의 게시글 등록이 완료 되었습니다. ");
     }
 
     //조회
     public void listed() {
         Scanner sc = new Scanner(System.in);
 
+        // 자료구조의 사이즈로 뿌리기
+        System.out.println("현재 페이지는 '1p'이며, 등록된 게시글의 수는 (최대갯수 표현하기)개 입니다. ");
 
-
-        System.out.println("현재 페이지는 '1p'이며, 등록된 게시글의 수는" + contentCntTotal + "개 입니다. ");
-
+        // listPrint 로직이 여기로 들어오기
         listPrint(sc.nextInt());
-//
-//        if(contentCntTotal != 3 && (contentCntTotal % 3) == 0) {
-//            System.out.println("이동하실 페이지 번호를 입력하세요");
-//            printPage(sc.nextInt());
-//        }
-//        if(contentCntTotal > 3 && (contentCntTotal % 3) != 0){
-//            System.out.println("이동하실 페이지 번호를 입력하세요");
-//            printPageNull(sc.nextInt(), contentCntTotal);
-//        }
-
-
     }
 
     //조회 print 메소드
-    public void listPrint(int content) {
-        int cnt = 0;
+    public void listPrint(int page) {
+        int limit = 99;
+        int offset = (page * limit) - limit;
 
-        int maxSize = (content * 3);
-        maxSize = (maxSize <= boardDataArrayList.size()) ? maxSize : boardDataArrayList.size();
+        int maxSize = (page * limit);
 
-        for(int i = content * 3 - 3; i < maxSize; i++) {
+        // 고려 해보기
+        maxSize = (maxSize < boardDataArrayList.size()) ? maxSize : boardDataArrayList.size();
 
+        for(int i = offset; i < maxSize; i++) {
             System.out.println("==============================");
+            System.out.println("작 성 자 : " + boardDataArrayList.get(i).getName());
             System.out.println("제    목 : " + boardDataArrayList.get(i).getTitle());
 
+            System.out.println("내    용 : ");
             StringTokenizer stk = new StringTokenizer(boardDataArrayList.get(i).getContent(), "\\n");
             while (stk.hasMoreTokens()) {
-                if(cnt >= 1) {
-                    System.out.println("           " + stk.nextToken());
-                } else {
-                    System.out.println("내    용 : " + stk.nextToken());
-                }
-                cnt ++;
+                System.out.println(stk.nextToken());
             }
-            System.out.println("작 성 자 : " + boardDataArrayList.get(i).getName());
+
             System.out.println("등록일시 : " + boardDataArrayList.get(i).getRegistrationTime());
             System.out.println("수정일시 : " + boardDataArrayList.get(i).getModificationTime());
             System.out.println("==============================");
@@ -118,31 +99,33 @@ public class Board {
                 title = sc.nextLine();
             }
         }
+
         return title;
     }
 
     //내용 유효성 검증
-    public String contentCheck(String content) {
-        Scanner sc = new Scanner(System.in);
+    public String contentCheck(Scanner sc, String content) {
+        if(content.length() <= 200) {
+            return content;
+        } else {
+            System.out.println("내용은 200자 이하로 작성할 수 있습니다.\n글자수에 맞게 다시 작성하세요");
+            content = sc.nextLine();
 
-
-        while (true) {
-            if(content.length() <= 100) {
-                break;
-            } else {
-                System.out.println("내용은 200자 이하로 작성할 수 있습니다.");
-                System.out.println("글자수에 맞게 다시 작성하세요");
-                content = sc.nextLine();
-            }
+            return this.contentCheck(sc, content);
         }
-        return content;
     }
 
     public String nameCheck(String name) {
         Scanner sc = new Scanner(System.in);
         while (true) {
+            // 딱 알맞는 용도의 정규표현식으로 사용하기
+            // 한글, 영어만
+            // 숫자, 특수문자
             String isKoreanCheck = ".*[ㄱ-ㅎㅏ-ㅣ가-힣0-9!?()]+.*";
             String isAlaphaCheck = "^[a-zA-Z]*$";
+            // 숫자와 특수문자에 대한 정규표현식 하나로만 검증을 하면은
+            // !name.matches(정규표현식);
+            // 위에서 content랑 비교해서 뭐가 더 좋을지 판단해서 수정
             if(name.matches(isKoreanCheck) || name.matches(isAlaphaCheck)) {
                 break;
             } else {
@@ -154,6 +137,7 @@ public class Board {
         return name;
     }
 
+    // 아래 내용은 필요없어보인다.
     //삭제 유효성 검증
     public Boolean isDeleted(String userName) {
         return true;

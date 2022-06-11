@@ -1,6 +1,7 @@
 package com.project.board;
 
 import java.util.Scanner;
+// 사용하지 않는 import는 제거하기
 import java.util.StringTokenizer;
 
 public class BoardFrame {
@@ -26,12 +27,14 @@ public class BoardFrame {
                     System.out.println("제목을 입력하세요 : ");
                     sc.nextLine();
                     String userTitle = sc.nextLine();
-                    //sc.nextLine();
-                    //userTitle = board.titleCheck(userTitle);
+                    // 아래 주석을 지우않는 이유
+                    // ex) 아래 로직과 현 사용중인 로직중 뭐가 더 효율적일지 모르겠어서 일단은 유지
+                    // sc.nextLine();
+                    // userTitle = board.titleCheck(userTitle);
 
                     System.out.println("내용을 입력하세요 : 개행하려면 -붙이세요");
                     String userContent = sc.nextLine();
-                    userContent = board.contentCheck(userContent);
+                    userContent = board.contentCheck(sc, userContent);
 
                     System.out.println("작성자 이름을 입력하세요 : ");
                     String userName = sc.nextLine() ;
