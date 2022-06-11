@@ -1,10 +1,7 @@
 package com.project.board;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class Board {
     int contentCnt = 0;
@@ -13,7 +10,7 @@ public class Board {
     public Board() {}
 
     HashMap<String, BoardData> boardDataHashMap = new HashMap<>();
-    ArrayList<BoardData> boardDataArrayList = new ArrayList<>(10);
+    ArrayList<BoardData> boardDataArrayList = new ArrayList<>();
 
     //등록
     public void registered(String userTitle, String userContent, String userName) {
@@ -48,60 +45,44 @@ public class Board {
         Scanner sc = new Scanner(System.in);
 
 
+
         System.out.println("현재 페이지는 '1p'이며, 등록된 게시글의 수는" + contentCntTotal + "개 입니다. ");
-        print(contentCnt);
 
-        if(contentCntTotal != 3 && (contentCntTotal % 3) == 0) {
-            System.out.println("이동하실 페이지 번호를 입력하세요");
-            printPage(sc.nextInt());
-        }
-        if(contentCntTotal > 3 && (contentCntTotal % 3) != 0){
-            System.out.println("이동하실 페이지 번호를 입력하세요");
-            printPageNull(sc.nextInt(), contentCntTotal);
-        }
+        listPrint(sc.nextInt());
+//
+//        if(contentCntTotal != 3 && (contentCntTotal % 3) == 0) {
+//            System.out.println("이동하실 페이지 번호를 입력하세요");
+//            printPage(sc.nextInt());
+//        }
+//        if(contentCntTotal > 3 && (contentCntTotal % 3) != 0){
+//            System.out.println("이동하실 페이지 번호를 입력하세요");
+//            printPageNull(sc.nextInt(), contentCntTotal);
+//        }
+
 
     }
 
-    //초기 출력 메소드
-    public void print(int content) {
-        for(int i = 0; i < content; i++) {
+    //조회 print 메소드
+    public void listPrint(int content) {
+        int cnt = 0;
+
+        int maxSize = (content * 3);
+        maxSize = (maxSize <= boardDataArrayList.size()) ? maxSize : boardDataArrayList.size();
+
+        for(int i = content * 3 - 3; i < maxSize; i++) {
+
             System.out.println("==============================");
             System.out.println("제    목 : " + boardDataArrayList.get(i).getTitle());
-            System.out.println("내    용 : " + boardDataArrayList.get(i).getContent());
-            System.out.println("작 성 자 : " + boardDataArrayList.get(i).getName());
-            System.out.println("등록일시 : " + boardDataArrayList.get(i).getRegistrationTime());
-            System.out.println("수정일시 : " + boardDataArrayList.get(i).getModificationTime());
-            System.out.println("==============================");
-        }
-    }
 
-    //페이지 3개씩 꽉 채워 출력하는 메소드
-    private void printPage(int content) {
-        System.out.println("현재 페이지는 " + content + "p");
-
-        for(int i = content * 3 - 3; i < content * 3; i++) {
-            System.out.println("==============================");
-            System.out.println("제    목 : " + boardDataArrayList.get(i).getTitle());
-            System.out.println("내    용 : " + boardDataArrayList.get(i).getContent());
-            System.out.println("작 성 자 : " + boardDataArrayList.get(i).getName());
-            System.out.println("등록일시 : " + boardDataArrayList.get(i).getRegistrationTime());
-            System.out.println("수정일시 : " + boardDataArrayList.get(i).getModificationTime());
-            System.out.println("==============================");
-        }
-    }
-
-    //페이지에 게시글이 꽉 안차지만 출력하는 메소드
-    private void printPageNull(int content, int range) {
-        if(content == 1) {
-            range = 3;
-        }
-
-        System.out.println("현재 페이지는 " + content + "p");
-
-        for(int i = content * 3 - 3; i < range; i++) {
-            System.out.println("==============================");
-            System.out.println("제    목 : " + boardDataArrayList.get(i).getTitle());
-            System.out.println("내    용 : " + boardDataArrayList.get(i).getContent());
+            StringTokenizer stk = new StringTokenizer(boardDataArrayList.get(i).getContent(), "\\n");
+            while (stk.hasMoreTokens()) {
+                if(cnt >= 1) {
+                    System.out.println("           " + stk.nextToken());
+                } else {
+                    System.out.println("내    용 : " + stk.nextToken());
+                }
+                cnt ++;
+            }
             System.out.println("작 성 자 : " + boardDataArrayList.get(i).getName());
             System.out.println("등록일시 : " + boardDataArrayList.get(i).getRegistrationTime());
             System.out.println("수정일시 : " + boardDataArrayList.get(i).getModificationTime());

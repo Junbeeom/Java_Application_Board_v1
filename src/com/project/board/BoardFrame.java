@@ -1,6 +1,7 @@
 package com.project.board;
 
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class BoardFrame {
     public static void main(String[] args) {
