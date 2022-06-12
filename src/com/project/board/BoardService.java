@@ -32,17 +32,40 @@ public class BoardService {
     }
 
     //조회
-    public void listed(int page) {
+    public void listed() {
         Scanner sc = new Scanner(System.in);
 
         // 자료구조의 사이즈로 뿌리기
         System.out.println("현재 페이지는 '1p'이며, 등록된 게시글의 수는" + boardlinkedHashMap.size() +"개 입니다. ");
 
-        // listPrint 로직이 여기로 들어오기
-        int limit = 99;
-        int offset = (page * limit) - limit;
+        System.out.print("이동하실 page를 입력하세요");
+        int page = sc.nextInt();
 
+        // listPrint 로직이 여기로 들어오기
+        int limit = 3;
+        int offset = (page * limit) - limit;
         int maxSize = (page * limit);
+
+        for(Board board : boardlinkedHashMap.values()) {
+            System.out.println("==============================");
+            System.out.println("작 성 자 : " + board.getName());
+            System.out.println("제    목 : " + board.getTitle());
+
+            System.out.println("내    용 : ");
+            StringTokenizer stk = new StringTokenizer(board.getContent(), "\\n");
+            while (stk.hasMoreTokens()) {
+                System.out.println(stk.nextToken());
+            }
+
+            System.out.println("등록일시 : " +  board.getCreated());
+            System.out.println("수정일시 : " +  board.getUpdated());
+            System.out.println("==============================");
+
+        }
+
+
+
+
 
 
     }
@@ -50,7 +73,7 @@ public class BoardService {
     //조회 print 메소드
     //ArrayList 사용한 로직.
     public void listPrint(int page) {
-        int limit = 99;
+        int limit = 3;
         int offset = (page * limit) - limit;
 
         int maxSize = (page * limit);

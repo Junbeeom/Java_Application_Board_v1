@@ -123,9 +123,7 @@ public class BoardFrame {
                     break;
                 //조회
                 case 5:
-                    System.out.println("제목을 입력하세요 : ");
-                    sc.nextLine();
-                    String userTitle = sc.nextLine();
+                    boardService.listed();
                     break;
                 default:
                     flag = false;
