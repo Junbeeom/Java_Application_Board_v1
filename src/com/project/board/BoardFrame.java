@@ -1,14 +1,12 @@
 package com.project.board;
 
 import java.util.Scanner;
-// 사용하지 않는 import는 제거하기
-import java.util.StringTokenizer;
 
 public class BoardFrame {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        Board board = new Board();
+        BoardService boardService = new BoardService();
 
         boolean flag = true;
 
@@ -23,25 +21,22 @@ public class BoardFrame {
             System.out.println("=================");
             
             switch (sc.nextInt()) {
+                //등록하기
                 case 1:
                     System.out.println("제목을 입력하세요 : ");
                     sc.nextLine();
                     String userTitle = sc.nextLine();
-                    // 아래 주석을 지우않는 이유
-                    // ex) 아래 로직과 현 사용중인 로직중 뭐가 더 효율적일지 모르겠어서 일단은 유지
-                    // sc.nextLine();
-                    // userTitle = board.titleCheck(userTitle);
 
-                    System.out.println("내용을 입력하세요 : 개행하려면 -붙이세요");
+                    System.out.println("내용을 입력하세요. 줄바꿈은 \n 입력하세요");
                     String userContent = sc.nextLine();
-                    userContent = board.contentCheck(sc, userContent);
+                    userContent = boardService.contentCheck(sc, userContent);
 
                     System.out.println("작성자 이름을 입력하세요 : ");
                     String userName = sc.nextLine() ;
-                    userName = board.nameCheck(userName);
-                    board.registered(userTitle, userContent, userName);
+                    userName = boardService.nameCheck(sc, userName);
+                    boardService.registered(userTitle, userContent, userName);
                     break;
-
+                //삭제하기
                 case 2:
                     System.out.println("제목으로 검색해서 삭제하기 1번");
                     System.out.println("작성자로 검색해서 삭제하기 2번");
@@ -51,7 +46,7 @@ public class BoardFrame {
                             userTitle = sc.next();
 
                             //유효성 검증 추가
-                            board.deleted();
+                            boardService.deleted();
                             break;
 
                         default:
@@ -59,10 +54,10 @@ public class BoardFrame {
                             userName = sc.next();
 
                             //유효성 검증 추가
-                            board.deleted();
+                            boardService.deleted();
                     }
                     break;
-
+                //검색하기
                 case 3:
                     System.out.println(" 제목  검색하기 1번");
                     System.out.println("작성자 검색하기 2번");
@@ -74,7 +69,7 @@ public class BoardFrame {
                             userTitle = sc.next();
 
                             //유효성 검증 추가
-                            board.searched();
+                            boardService.searched();
                             break;
 
                         case 2:
@@ -82,7 +77,7 @@ public class BoardFrame {
                             userName = sc.next();
 
                             //유효성 검증 추가
-                            board.searched();
+                            boardService.searched();
                             break;
 
                         default:
@@ -90,11 +85,11 @@ public class BoardFrame {
                             userContent = sc.next();
 
                             //유효성 검증 추가
-                            board.searched();
+                            boardService.searched();
                             break;
                     }
                     break;
-
+                //수정하기
                 case 4:
                     System.out.println(" 제목  수정하기 1번");
                     System.out.println("작성자 수정하기 2번");
@@ -106,7 +101,7 @@ public class BoardFrame {
                             userTitle = sc.next();
 
                             //유효성 검증 추가
-                            board.modified();
+                            boardService.modified();
                             break;
 
                         case 2:
@@ -114,7 +109,7 @@ public class BoardFrame {
                             userName = sc.next();
 
                             //유효성 검증 추가
-                            board.modified();
+                            boardService.modified();
                             break;
 
                         default:
@@ -122,13 +117,15 @@ public class BoardFrame {
                             userContent = sc.next();
 
                             //유효성 검증 추가
-                            board.modified();
+                            boardService.modified();
                             break;
                     }
                     break;
-
+                //조회
                 case 5:
-                    board.listed();
+                    System.out.println("제목을 입력하세요 : ");
+                    sc.nextLine();
+                    String userTitle = sc.nextLine();
                     break;
                 default:
                     flag = false;
