@@ -26,6 +26,7 @@ public class BoardFrame {
                     System.out.println("제목을 입력하세요 : ");
                     sc.nextLine();
                     String userTitle = sc.nextLine();
+                    userTitle = boardService.titleCheck(sc, userTitle);
 
                     System.out.println("내용을 입력하세요. 줄바꿈은 \\n을 입력하세요");
                     String userContent = sc.nextLine();
@@ -36,26 +37,14 @@ public class BoardFrame {
                     userName = boardService.nameCheck(sc, userName);
                     boardService.registered(userTitle, userContent, userName);
                     break;
+
                 //삭제하기
                 case 2:
-                    System.out.println("제목으로 검색해서 삭제하기 1번");
-                    System.out.println("작성자로 검색해서 삭제하기 2번");
-                    switch (sc.nextInt()) {
-                        case 1:
-                            System.out.println("제목을 입력하세요");
-                            userTitle = sc.next();
+                    System.out.println("게시글의 고유번호를 입력하세요. ");
+                    int number = sc.nextInt();
 
-                            //유효성 검증 추가
-                            boardService.deleted();
-                            break;
+                    boardService.deleted(number);
 
-                        default:
-                            System.out.println("작성자의 이름을 입력하세요");
-                            userName = sc.next();
-
-                            //유효성 검증 추가
-                            boardService.deleted();
-                    }
                     break;
                 //검색하기
                 case 3:
