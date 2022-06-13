@@ -1,5 +1,6 @@
 package com.project.board;
 
+import javax.swing.text.AbstractDocument;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -22,12 +23,8 @@ public class BoardService {
         // lhm.put(고유번호, new Board(제목, 내용, 이름, 등록시간, 수정시간(null, "없음", "-"), 삭제여부(false)));
         boardlinkedHashMap.put(cnt, new Board(userTitle, userContent, userName, createdDate, "없음", false));
 
-        System.out.println("\n" + userName + " 의 게시글 등록이 완료 되었습니다. ");
+        System.out.println("\n" + userName + "님의 게시글 등록이 완료 되었습니다.\n게시글 고유번호는 " + cnt + "입니다.");
         cnt++;
-
-
-        //게시글의 개수 세기.
-
     }
 
     //조회
@@ -195,14 +192,14 @@ public class BoardService {
                         flag = true;
                     }
                 }
-                if(!flag) {
+                if (!flag) {
                     System.out.println("등록된 작성자가 없습니다.");
                 }
                 break;
             case 2:
                 //제목으로 검색
                 for (int key : boardlinkedHashMap.keySet()) {
-                    if(boardlinkedHashMap.get(key).getTitle().contains(userTitle) && boardlinkedHashMap.get(key).getDeleted() == false) {
+                    if (boardlinkedHashMap.get(key).getTitle().contains(userTitle) && boardlinkedHashMap.get(key).getDeleted() == false) {
                         System.out.println("고유번호 : " + key);
                         System.out.println("작 성 자 : " + boardlinkedHashMap.get(key).getName());
                         System.out.println("제    목 : " + boardlinkedHashMap.get(key).getTitle());
@@ -219,14 +216,14 @@ public class BoardService {
                         flag = true;
                     }
                 }
-                if(!flag) {
+                if (!flag) {
                     System.out.println("등록된 제목이 없습니다.");
                 }
                 break;
             case 3:
                 //내용으로 검색
                 for (int key : boardlinkedHashMap.keySet()) {
-                    if(boardlinkedHashMap.get(key).getContent().contains(userTitle) && boardlinkedHashMap.get(key).getDeleted() == false) {
+                    if (boardlinkedHashMap.get(key).getContent().contains(userTitle) && boardlinkedHashMap.get(key).getDeleted() == false) {
                         System.out.println("고유번호 : " + key);
                         System.out.println("작 성 자 : " + boardlinkedHashMap.get(key).getName());
                         System.out.println("제    목 : " + boardlinkedHashMap.get(key).getTitle());
@@ -243,7 +240,7 @@ public class BoardService {
                         flag = true;
                     }
                 }
-                if(!flag) {
+                if (!flag) {
                     System.out.println("등록된 내용이 없습니다.");
                 }
                 break;
@@ -254,12 +251,114 @@ public class BoardService {
 
 
     //수정
-    public void modified() {
+    public void modified(String userName, int choice) {
+        Scanner sc = new Scanner(System.in);
+        boolean flag = false;
+        switch (choice) {
+            //이름으로 수정
+            case 1:
+                for (int key : boardlinkedHashMap.keySet()) {
+                    if (boardlinkedHashMap.get(key).getName().contains(userName) && boardlinkedHashMap.get(key).getDeleted() == false) {
+                        System.out.println("변경하실 이름을 입력하세요.");
+                        String UserInputNewName = sc.next();
 
+                        System.out.println("변경 1번, 취소 2번");
+
+                        switch (sc.nextInt()) {
+                            case 1:
+                                String newName = nameCheck(sc, UserInputNewName);
+                                String modifyTime = modificationDate();
+
+                                boardlinkedHashMap.get(key).setName(newName);
+                                boardlinkedHashMap.get(key).setUpdated(modifyTime);
+
+                                System.out.println("수정이 완료되었습니다.\n수정일시 : " + modifyTime);
+                                break;
+
+                            default:
+                                System.out.println("취소 되었습니다");
+                                break;
+                        }
+                    }
+                    flag = true;
+                }
+                if (!flag) {
+                    System.out.println("등록된 작성자가 없습니다.");
+                }
+                break;
+
+            case 2:
+                //제목수정
+                for (int key : boardlinkedHashMap.keySet()) {
+                    if (boardlinkedHashMap.get(key).getTitle().contains(userName) && boardlinkedHashMap.get(key).getDeleted() == false) {
+                        System.out.println("변경하실 제목을 입력하세요.");
+                        String UserInputNewTitle = sc.next();
+
+                        System.out.println("변경 1번, 취소 2번");
+
+                        switch (sc.nextInt()) {
+                            case 1:
+                                String newTitle = nameCheck(sc, UserInputNewTitle);
+                                String modifyTime = modificationDate();
+
+                                boardlinkedHashMap.get(key).setTitle(newTitle);
+                                boardlinkedHashMap.get(key).setUpdated(modifyTime);
+
+                                System.out.println("수정이 완료되었습니다.\n수정일시 : " + modifyTime);
+                                break;
+
+                            default:
+                                System.out.println("취소 되었습니다");
+                                break;
+                        }
+                    }
+                    flag = true;
+                }
+
+                if (!flag) {
+                    System.out.println("등록된 제목이 없습니다.");
+                }
+                break;
+
+            case 3:
+                //내용으로 수정
+                for (int key : boardlinkedHashMap.keySet()) {
+                    if (boardlinkedHashMap.get(key).getContent().contains(userName) && boardlinkedHashMap.get(key).getDeleted() == false) {
+                        System.out.println("변경하실 내용을 입력하세요.");
+                        String UserInputNewContent = sc.next();
+
+                        System.out.println("변경 1번, 취소 2번");
+
+                        switch (sc.nextInt()) {
+                            case 1:
+                                String newContent = nameCheck(sc, UserInputNewContent);
+                                String modifyTime = modificationDate();
+
+                                boardlinkedHashMap.get(key).setContent(newContent);
+                                boardlinkedHashMap.get(key).setUpdated(modifyTime);
+
+                                System.out.println("수정이 완료되었습니다.\n수정일시 : " + modifyTime);
+                                break;
+
+                            default:
+                                System.out.println("취소 되었습니다");
+                                break;
+                        }
+                    }
+                    flag = true;
+                }
+
+                if (!flag) {
+                    System.out.println("등록된 내용이 없습니다.");
+                }
+                break;
+            default:
+                break;
+
+        }
     }
-
     //삭제
-    public void deleted(int number) {
+    public void deleted ( int number){
         Scanner sc = new Scanner(System.in);
 
         if (boardlinkedHashMap.get(number) == null) {
@@ -279,8 +378,9 @@ public class BoardService {
         }
     }
 
+
     //제목 유효성 검증
-    public String titleCheck(Scanner sc, String title) {
+    public String titleCheck (Scanner sc, String title){
         if (title.length() <= 12) {
             return title;
         } else {
@@ -291,7 +391,7 @@ public class BoardService {
     }
 
     //내용 유효성 검증
-    public String contentCheck(Scanner sc, String content) {
+    public String contentCheck (Scanner sc, String content){
         if (content.length() <= 200) {
             return content;
         } else {
@@ -303,7 +403,7 @@ public class BoardService {
     }
 
     //이름 유효성 검증
-    public String nameCheck(Scanner sc, String name) {
+    public String nameCheck (Scanner sc, String name){
         String isKoreanCheck = "^[가-힣]*$";
         String isAlaphaCheck = "^[a-zA-Z]*$";
         if (name.matches(isKoreanCheck) || name.matches(isAlaphaCheck)) {
@@ -315,4 +415,14 @@ public class BoardService {
             return this.nameCheck(sc, name);
         }
     }
+
+    //수정시간 등록을 위한 메소드
+    public String modificationDate () {
+        SimpleDateFormat userFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        Date time = new Date();
+        String userModificationDate = userFormat.format(time);
+
+        return userModificationDate;
+    }
 }
+
