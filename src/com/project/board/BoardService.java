@@ -5,22 +5,16 @@ import java.util.*;
 
 // 기능을 담당하고 있는 클래스임을 명시
 public class BoardService {
+    int cnt = 0;
     public BoardService() {}
 
-    // hashMap -> LinkedHashMap put()된 순서를 보장해주는 자료구조로 변경
-    // key값 -> 고유 번호 -> DB(PK) -> LinkedHashMap key -> 게시글이 생성될 때 +1되는 카운트 수
-    // LinkedHashMap<String, Board(BoardData)> lhm = new LinkedHashMap<String, Board>();
     // lhm.get(입력받은고유번호).setName("바꿀이름");
     // lhm.get(입력받은고유번호).setDeleted(true);
 
-    // HashMap<String, Integer> hm = new HashMap<String, Integer>();
-    HashMap<String, Board> boardDataHashMap = new HashMap<>();
-    ArrayList<Board> boardDataArrayList = new ArrayList<>();
     LinkedHashMap<Integer, Board> boardlinkedHashMap = new LinkedHashMap<Integer, Board>();
 
     //등록
     public void registered(String userTitle, String userContent, String userName) {
-        int cnt = 1;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
         String createdDate = dateFormat.format(new Date());
 
@@ -35,67 +29,102 @@ public class BoardService {
     public void listed() {
         Scanner sc = new Scanner(System.in);
 
-        // 자료구조의 사이즈로 뿌리기
-        System.out.println("현재 페이지는 '1p'이며, 등록된 게시글의 수는" + boardlinkedHashMap.size() +"개 입니다. ");
+        System.out.println("현재 페이지는 '1page'입니다.\n등록된 게시글의 수는 총 " + boardlinkedHashMap.size() +" 개 입니다. ");
+        for (int key : boardlinkedHashMap.keySet()) {
+            if (key >= 0 && key < 3) {
+                System.out.println("==============================");
+                System.out.println("고유번호 : " + key);
+                System.out.println("작 성 자 : " + boardlinkedHashMap.get(key).getName());
+                System.out.println("제    목 : " + boardlinkedHashMap.get(key).getTitle());
 
-        System.out.print("이동하실 page를 입력하세요");
-        int page = sc.nextInt();
+                System.out.println("내    용 : ");
+                StringTokenizer stk = new StringTokenizer(boardlinkedHashMap.get(key).getContent(), "\\n");
+                while (stk.hasMoreTokens()) {
+                    System.out.println(stk.nextToken());
+                }
 
-        // listPrint 로직이 여기로 들어오기
-        int limit = 3;
-        int offset = (page * limit) - limit;
-        int maxSize = (page * limit);
-
-        for(Board board : boardlinkedHashMap.values()) {
-            System.out.println("==============================");
-            System.out.println("작 성 자 : " + board.getName());
-            System.out.println("제    목 : " + board.getTitle());
-
-            System.out.println("내    용 : ");
-            StringTokenizer stk = new StringTokenizer(board.getContent(), "\\n");
-            while (stk.hasMoreTokens()) {
-                System.out.println(stk.nextToken());
+                System.out.println("등록일시 : " + boardlinkedHashMap.get(key).getCreated());
+                System.out.println("수정일시 : " + boardlinkedHashMap.get(key).getUpdated());
+                System.out.println("==============================");
             }
-
-            System.out.println("등록일시 : " +  board.getCreated());
-            System.out.println("수정일시 : " +  board.getUpdated());
-            System.out.println("==============================");
-
         }
-
-
-
-
-
-
-    }
-
-    //조회 print 메소드
-    //ArrayList 사용한 로직.
-    public void listPrint(int page) {
         int limit = 3;
-        int offset = (page * limit) - limit;
 
-        int maxSize = (page * limit);
+        //게시글이 3개 이상 시 부터 실행되는 로직
+        if(boardlinkedHashMap.size() > limit) {
+            System.out.println("페이지 이동은 1번, 메뉴로 이동는 2번");
+            int switchNumber = sc.nextInt();
 
-        // 고려 해보기
-        //
-        maxSize = (maxSize < boardDataArrayList.size()) ? maxSize : boardDataArrayList.size();
+            switch (switchNumber) {
+                case 1:
+                    System.out.print("이동 가능한 페이지 개수는 " + boardlinkedHashMap.size() / 3 +   "개 입니다. \n이동하실 page를 입력하세요\n ");
+                    int page = sc.nextInt();
 
-        for(int i = offset; i < maxSize; i++) {
-            System.out.println("==============================");
-            System.out.println("작 성 자 : " + boardDataArrayList.get(i).getName());
-            System.out.println("제    목 : " + boardDataArrayList.get(i).getTitle());
+                    int offset = (page * limit) - limit;
+                    int maxSize = (page * limit);
 
-            System.out.println("내    용 : ");
-            StringTokenizer stk = new StringTokenizer(boardDataArrayList.get(i).getContent(), "\\n");
-            while (stk.hasMoreTokens()) {
-                System.out.println(stk.nextToken());
+                    System.out.println("================================");
+                    System.out.println("현재 페이지는 " + page + "입니다");
+
+                    for (int key : boardlinkedHashMap.keySet()) {
+                        if(key >= offset && key < maxSize) {
+                            System.out.println("고유번호 : " + key);
+                            System.out.println("작 성 자 : " + boardlinkedHashMap.get(key).getName());
+                            System.out.println("제    목 : " + boardlinkedHashMap.get(key).getTitle());
+
+                            System.out.println("내    용 : ");
+                            StringTokenizer stk = new StringTokenizer(boardlinkedHashMap.get(key).getContent(), "\\n");
+                            while (stk.hasMoreTokens()) {
+                                System.out.println(stk.nextToken());
+                            }
+
+                            System.out.println("등록일시 : " +  boardlinkedHashMap.get(key).getCreated());
+                            System.out.println("수정일시 : " +  boardlinkedHashMap.get(key).getUpdated());
+                            System.out.println("==============================");
+                        }
+                    }
+
+                    //추가 페이지 이동 여부 확인
+                    while (true) {
+                        System.out.println("추가적인 페이지이동 1번, 취소2번");
+
+                        if (sc.nextInt() == 1) {
+                            System.out.print("이동 가능한 페이지 개수는 " + boardlinkedHashMap.size() / 3 +   "개 입니다. \n이동하실 page를 입력하세요\n ");
+                            page = sc.nextInt();
+
+                            offset = (page * limit) - limit;
+                            maxSize = (page * limit);
+
+                            System.out.println("================================");
+                            System.out.println("현재 페이지는 " + page + "입니다");
+
+                            for (int key : boardlinkedHashMap.keySet()) {
+                                if (key >= offset && key < maxSize) {
+                                    System.out.println("고유번호 : " + key);
+                                    System.out.println("작 성 자 : " + boardlinkedHashMap.get(key).getName());
+                                    System.out.println("제    목 : " + boardlinkedHashMap.get(key).getTitle());
+
+                                    System.out.println("내    용 : ");
+                                    StringTokenizer stk = new StringTokenizer(boardlinkedHashMap.get(key).getContent(), "\\n");
+                                    while (stk.hasMoreTokens()) {
+                                        System.out.println(stk.nextToken());
+                                    }
+
+                                    System.out.println("등록일시 : " + boardlinkedHashMap.get(key).getCreated());
+                                    System.out.println("수정일시 : " + boardlinkedHashMap.get(key).getUpdated());
+                                    System.out.println("==============================");
+                                }
+                            }
+                        } else {
+                            break;
+                        }
+                    }
+                    break;
+
+                default:
+                    System.out.println("취소 되었습니다");
+                    break;
             }
-
-            System.out.println("등록일시 : " + boardDataArrayList.get(i).getCreated());
-            System.out.println("수정일시 : " + boardDataArrayList.get(i).getUpdated());
-            System.out.println("==============================");
         }
     }
 
@@ -111,6 +140,7 @@ public class BoardService {
 
     //삭제
     public void deleted() {
+
 
     }
 

@@ -27,7 +27,7 @@ public class BoardFrame {
                     sc.nextLine();
                     String userTitle = sc.nextLine();
 
-                    System.out.println("내용을 입력하세요. 줄바꿈은 \n 입력하세요");
+                    System.out.println("내용을 입력하세요. 줄바꿈은 \\n을 입력하세요");
                     String userContent = sc.nextLine();
                     userContent = boardService.contentCheck(sc, userContent);
 
