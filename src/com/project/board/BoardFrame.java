@@ -1,5 +1,6 @@
 package com.project.board;
 
+import javax.swing.text.AbstractDocument;
 import java.util.Scanner;
 
 public class BoardFrame {
@@ -42,42 +43,37 @@ public class BoardFrame {
                 case 2:
                     System.out.println("게시글의 고유번호를 입력하세요. ");
                     int number = sc.nextInt();
-
                     boardService.deleted(number);
-
                     break;
+
                 //검색하기
                 case 3:
-                    System.out.println(" 제목  검색하기 1번");
-                    System.out.println("작성자 검색하기 2번");
-                    System.out.println(" 내용  검색하기 3번");
-
-                    switch (sc.nextInt()) {
+                    System.out.println("작성자로 검색 1번\n제목으로 검색 2번\n내용으로 검색 3번\n취소 아무키 입력");
+                    int choice = sc.nextInt();
+                    switch (choice) {
                         case 1:
-                            System.out.println("제목을 입력하세요");
-                            userTitle = sc.next();
-
-                            //유효성 검증 추가
-                            boardService.searched();
-                            break;
-
-                        case 2:
-                            System.out.println("작성자의 이름을 입력하세요");
+                            System.out.println("등록된 작성자의 이름을 입력하세요");
                             userName = sc.next();
-
-                            //유효성 검증 추가
-                            boardService.searched();
+                            boardService.nameCheck(sc, userName);
+                            boardService.searched(userName, choice);
                             break;
-
-                        default:
-                            System.out.println("내용을 입력하세요");
+                        case 2:
+                            System.out.println("등록된 게시글의 제목을 입력하세요");
+                            userTitle = sc.next();
+                            boardService.contentCheck(sc, userTitle);
+                            boardService.searched(userTitle, choice);
+                            break;
+                        case 3:
+                            System.out.println("등록된 게시글의 내용을 입력하세요");
                             userContent = sc.next();
-
-                            //유효성 검증 추가
-                            boardService.searched();
+                            boardService.nameCheck(sc, userContent);
+                            boardService.searched(userContent, choice);
+                            break;
+                        default:
                             break;
                     }
                     break;
+
                 //수정하기
                 case 4:
                     System.out.println(" 제목  수정하기 1번");
@@ -110,12 +106,11 @@ public class BoardFrame {
                             break;
                     }
                     break;
+
                 //조회
                 case 5:
                     boardService.listed();
                     break;
-                default:
-                    flag = false;
             }
         }
     }

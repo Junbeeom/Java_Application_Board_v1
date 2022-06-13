@@ -36,7 +36,6 @@ public class BoardService {
         int totalContent = 0;
         int limit = 3;
         int offset = 0;
-        int maxSize = limit;
         int totalMax = 0;
 
 
@@ -173,9 +172,86 @@ public class BoardService {
     }
 
     //검색
-    public void searched() {
+    public void searched(String userTitle, int choice) {
+        boolean flag = false;
+        switch (choice) {
+            //이름으로 검색
+            case 1:
+                for (int key : boardlinkedHashMap.keySet()) {
+                    if (boardlinkedHashMap.get(key).getName().contains(userTitle) && boardlinkedHashMap.get(key).getDeleted() == false) {
+                        System.out.println("고유번호 : " + key);
+                        System.out.println("작 성 자 : " + boardlinkedHashMap.get(key).getName());
+                        System.out.println("제    목 : " + boardlinkedHashMap.get(key).getTitle());
 
+                        System.out.println("내    용 : ");
+                        StringTokenizer stk = new StringTokenizer(boardlinkedHashMap.get(key).getContent(), "\\n");
+                        while (stk.hasMoreTokens()) {
+                            System.out.println(stk.nextToken());
+                        }
+
+                        System.out.println("등록일시 : " + boardlinkedHashMap.get(key).getCreated());
+                        System.out.println("수정일시 : " + boardlinkedHashMap.get(key).getUpdated());
+                        System.out.println("==============================");
+                        flag = true;
+                    }
+                }
+                if(!flag) {
+                    System.out.println("등록된 작성자가 없습니다.");
+                }
+                break;
+            case 2:
+                //제목으로 검색
+                for (int key : boardlinkedHashMap.keySet()) {
+                    if(boardlinkedHashMap.get(key).getTitle().contains(userTitle) && boardlinkedHashMap.get(key).getDeleted() == false) {
+                        System.out.println("고유번호 : " + key);
+                        System.out.println("작 성 자 : " + boardlinkedHashMap.get(key).getName());
+                        System.out.println("제    목 : " + boardlinkedHashMap.get(key).getTitle());
+
+                        System.out.println("내    용 : ");
+                        StringTokenizer stk = new StringTokenizer(boardlinkedHashMap.get(key).getContent(), "\\n");
+                        while (stk.hasMoreTokens()) {
+                            System.out.println(stk.nextToken());
+                        }
+
+                        System.out.println("등록일시 : " + boardlinkedHashMap.get(key).getCreated());
+                        System.out.println("수정일시 : " + boardlinkedHashMap.get(key).getUpdated());
+                        System.out.println("==============================");
+                        flag = true;
+                    }
+                }
+                if(!flag) {
+                    System.out.println("등록된 제목이 없습니다.");
+                }
+                break;
+            case 3:
+                //내용으로 검색
+                for (int key : boardlinkedHashMap.keySet()) {
+                    if(boardlinkedHashMap.get(key).getContent().contains(userTitle) && boardlinkedHashMap.get(key).getDeleted() == false) {
+                        System.out.println("고유번호 : " + key);
+                        System.out.println("작 성 자 : " + boardlinkedHashMap.get(key).getName());
+                        System.out.println("제    목 : " + boardlinkedHashMap.get(key).getTitle());
+
+                        System.out.println("내    용 : ");
+                        StringTokenizer stk = new StringTokenizer(boardlinkedHashMap.get(key).getContent(), "\\n");
+                        while (stk.hasMoreTokens()) {
+                            System.out.println(stk.nextToken());
+                        }
+
+                        System.out.println("등록일시 : " + boardlinkedHashMap.get(key).getCreated());
+                        System.out.println("수정일시 : " + boardlinkedHashMap.get(key).getUpdated());
+                        System.out.println("==============================");
+                        flag = true;
+                    }
+                }
+                if(!flag) {
+                    System.out.println("등록된 내용이 없습니다.");
+                }
+                break;
+            default:
+                break;
+        }
     }
+
 
     //수정
     public void modified() {
