@@ -107,6 +107,10 @@ public class BoardFrame {
                 case 5:
                     boardService.listed();
                     break;
+
+                default:
+                    flag = false;
+                    break;
             }
         }
     }

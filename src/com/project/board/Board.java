@@ -1,13 +1,16 @@
 package com.project.board;
 
-public class Board {
+import java.util.Collections;
 
+public class Board {
     private String title;
     private String content;
     private String name;
     private String created;
     private String updated;
     private boolean deleted;
+    // isDeleted -> T,F , deleted_ts -> 삭제된 시간
+    // iSDeleted, deleted
 
     public Board() {}
 

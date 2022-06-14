@@ -4,10 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class BoardService {
-    int cnt = 1;
-
-    public BoardService() {
-    }
+    public BoardService() {}
 
     LinkedHashMap<Integer, Board> boardlinkedHashMap = new LinkedHashMap<Integer, Board>();
 
@@ -16,10 +13,9 @@ public class BoardService {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
         String createdDate = dateFormat.format(new Date());
 
-        boardlinkedHashMap.put(cnt, new Board(userTitle, userContent, userName, createdDate, "없음", false));
+        boardlinkedHashMap.put((boardlinkedHashMap.size() + 1), new Board(userTitle, userContent, userName, createdDate, "없음", false));
 
-        System.out.println("\n" + userName + "님의 게시글 등록이 완료 되었습니다.\n게시글 고유번호는 " + cnt + "입니다.");
-        cnt++;
+        System.out.println("\n" + userName + "님의 게시글 등록이 완료 되었습니다.\n게시글 고유번호는 " + boardlinkedHashMap.size() + "입니다.");
     }
 
     //조회
@@ -38,7 +34,8 @@ public class BoardService {
             }
         }
 
-        //false에 따른 가변 limit 범위
+        // false에 따른 가변 limit 범위
+        // 아래 코드는 확장성이 고려되지 않는 코드
         for (int key : boardlinkedHashMap.keySet()) {
             if (offset < key && key <= limit) {
 
@@ -164,11 +161,12 @@ public class BoardService {
     }
 
     //검색
+    // userTitle -> value, searchValue
     public void searched(String userTitle, int choice) {
         boolean flag = false;
         switch (choice) {
 
-            //이름으로 검색
+            //이름으로 검색수정
             case 1:
                 for (int key : boardlinkedHashMap.keySet()) {
                     if (boardlinkedHashMap.get(key).getName().contains(userTitle) && boardlinkedHashMap.get(key).getDeleted() == false) {
@@ -249,6 +247,9 @@ public class BoardService {
 
 
     //수정
+    // userName -> 네이밍 변경하고 고유번호로 수정할 수 있도록 로직 개선
+    // 고유 번호 입력 받아 -> 값이 없어 -> 존재하지 않는 게시글입니다.
+    // 고유 번호 입력 받아 -> 값이 있어 -> 작성자, 제목, 내용 중 수정할거 택1 -> 수정
     public void modified(String userName, int choice) {
         Scanner sc = new Scanner(System.in);
         boolean flag = false;
@@ -356,8 +357,9 @@ public class BoardService {
 
         }
     }
+
     //삭제
-    public void deleted ( int number){
+    public void deleted(int number) {
         Scanner sc = new Scanner(System.in);
 
         if (boardlinkedHashMap.get(number) == null) {
