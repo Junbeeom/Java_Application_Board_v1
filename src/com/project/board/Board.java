@@ -8,7 +8,6 @@ public class Board {
     private String created;
     private String updated;
     private boolean deleted;
-    // private boolean deleted
 
     public Board() {}
 

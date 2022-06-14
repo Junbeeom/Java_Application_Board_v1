@@ -1,6 +1,5 @@
 package com.project.board;
 
-import javax.swing.text.AbstractDocument;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -10,9 +9,6 @@ public class BoardService {
     public BoardService() {
     }
 
-    // lhm.get(입력받은고유번호).setName("바꿀이름");
-    // lhm.get(입력받은고유번호).setDeleted(true);
-
     LinkedHashMap<Integer, Board> boardlinkedHashMap = new LinkedHashMap<Integer, Board>();
 
     //등록
@@ -20,7 +16,6 @@ public class BoardService {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
         String createdDate = dateFormat.format(new Date());
 
-        // lhm.put(고유번호, new Board(제목, 내용, 이름, 등록시간, 수정시간(null, "없음", "-"), 삭제여부(false)));
         boardlinkedHashMap.put(cnt, new Board(userTitle, userContent, userName, createdDate, "없음", false));
 
         System.out.println("\n" + userName + "님의 게시글 등록이 완료 되었습니다.\n게시글 고유번호는 " + cnt + "입니다.");
@@ -172,6 +167,7 @@ public class BoardService {
     public void searched(String userTitle, int choice) {
         boolean flag = false;
         switch (choice) {
+
             //이름으로 검색
             case 1:
                 for (int key : boardlinkedHashMap.keySet()) {
@@ -196,6 +192,7 @@ public class BoardService {
                     System.out.println("등록된 작성자가 없습니다.");
                 }
                 break;
+
             case 2:
                 //제목으로 검색
                 for (int key : boardlinkedHashMap.keySet()) {
@@ -220,6 +217,7 @@ public class BoardService {
                     System.out.println("등록된 제목이 없습니다.");
                 }
                 break;
+
             case 3:
                 //내용으로 검색
                 for (int key : boardlinkedHashMap.keySet()) {
@@ -255,6 +253,7 @@ public class BoardService {
         Scanner sc = new Scanner(System.in);
         boolean flag = false;
         switch (choice) {
+
             //이름으로 수정
             case 1:
                 for (int key : boardlinkedHashMap.keySet()) {

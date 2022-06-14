@@ -1,6 +1,5 @@
 package com.project.board;
 
-import javax.swing.text.AbstractDocument;
 import java.util.Scanner;
 
 public class BoardFrame {
@@ -102,11 +101,9 @@ public class BoardFrame {
                         default:
                             break;
                     }
-
-
                     break;
 
-                //조회
+                //조회하기
                 case 5:
                     boardService.listed();
                     break;
