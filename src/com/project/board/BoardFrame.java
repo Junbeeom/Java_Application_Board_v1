@@ -77,30 +77,9 @@ public class BoardFrame {
 
                 //수정하기
                 case 4:
-                    System.out.println("작성자로 검색 1번\n제목으로 검색 2번\n내용으로 검색 3번\n취소 아무키 입력");
-                    choice = sc.nextInt();
-                    switch (choice) {
-                        case 1:
-                            System.out.println("등록된 작성자의 이름을 입력하세요");
-                            userName = sc.next();
-                            boardService.nameCheck(sc, userName);
-                            boardService.modified(userName, choice);
-                            break;
-                        case 2:
-                            System.out.println("등록된 게시글의 제목을 입력하세요");
-                            userTitle = sc.next();
-                            boardService.contentCheck(sc, userTitle);
-                            boardService.modified(userTitle, choice);
-                            break;
-                        case 3:
-                            System.out.println("등록된 게시글의 내용을 입력하세요");
-                            userContent = sc.next();
-                            boardService.nameCheck(sc, userContent);
-                            boardService.modified(userContent, choice);
-                            break;
-                        default:
-                            break;
-                    }
+                    System.out.println("게시글의 고유번호를 입력하세요. ");
+                    number = sc.nextInt();
+                    boardService.modified(number);
                     break;
 
                 //조회하기

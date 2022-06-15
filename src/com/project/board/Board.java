@@ -1,26 +1,22 @@
 package com.project.board;
 
-import java.util.Collections;
-
 public class Board {
     private String title;
     private String content;
     private String name;
-    private String created;
-    private String updated;
-    private boolean deleted;
-    // isDeleted -> T,F , deleted_ts -> 삭제된 시간
-    // iSDeleted, deleted
+    private String createdTs;
+    private String updatedTs;
+    private String deletedTs;
 
     public Board() {}
 
-    public Board(String title, String content, String name, String created, String updated, boolean deleted) {
+    public Board(String title, String content, String name, String createdTs, String updatedTs, String deletedTs) {
         this.title = title;
         this.content = content;
         this.name = name;
-        this.created = created;
-        this.updated = updated;
-        this.deleted = deleted;
+        this.createdTs = createdTs;
+        this.updatedTs = updatedTs;
+        this.deletedTs = deletedTs;
     }
 
     public String getTitle() {
@@ -35,16 +31,16 @@ public class Board {
         return name;
     }
 
-    public String getCreated() {
-        return created;
+    public String getCreatedTs() {
+        return createdTs;
     }
 
-    public String getUpdated() {
-        return updated;
+    public String getUpdatedTs() {
+        return updatedTs;
     }
 
-    public boolean getDeleted() {
-        return deleted;
+    public String getDeletedTs() {
+        return deletedTs;
     }
 
     public void setTitle(String title) {
@@ -59,16 +55,14 @@ public class Board {
         this.name = name;
     }
 
-    public void setCreated(String created) {
-        this.created = created;
+    public void setCreatedTs(String createdTs) {
+        this.createdTs = createdTs;
     }
 
-    public void setUpdated(String updated) {
-        this.updated = updated;
-    }
+    public void setUpdatedTs(String updatedTs) { this.updatedTs = updatedTs;}
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public void setDeletedTs(String deletedTs) {
+        this.deletedTs = deletedTs;
     }
 
 }
