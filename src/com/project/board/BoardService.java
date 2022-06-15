@@ -14,10 +14,9 @@ public class BoardService {
 
     //등록
     public void registered(String userTitle, String userContent, String userName) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-        String createdTime = dateFormat.format(new Date());
 
-        listedHashMap.put((listedHashMap.size() + 1), new Board(userTitle, userContent, userName, createdTime, "없음", "없음"));
+        String createdts = ts();
+        listedHashMap.put((listedHashMap.size() + 1), new Board(userTitle, userContent, userName, createdts, "없음", "없음"));
 
         System.out.println("\n" + userName + "님의 게시글 등록이 완료 되었습니다.\n게시글 고유번호는 " + listedHashMap.size() + "입니다.");
     }
@@ -25,7 +24,7 @@ public class BoardService {
     //조회
     public void listed() {
         Scanner sc = new Scanner(System.in);
-        int limit = 2;
+        int limit = 3;
         int offset;
         int cnt = 0;
 
@@ -165,7 +164,7 @@ public class BoardService {
                     newName = nameCheck(sc, newName);
                     listedHashMap.get(number).setName(newName);
 
-                    String updateTs = updatedTs();
+                    String updateTs = ts();
                     listedHashMap.get(number).setUpdatedTs(updateTs);
 
                     System.out.println(listedHashMap.get(number).getName() + "님의 게시글이 수정되었습니다.\n수정일시 : "  + updateTs);
@@ -180,7 +179,7 @@ public class BoardService {
                     newTitle = titleCheck(sc, newTitle);
                     listedHashMap.get(number).setTitle(newTitle);
 
-                    updateTs = updatedTs();
+                    updateTs = ts();
                     listedHashMap.get(number).setUpdatedTs(updateTs);
 
                     System.out.println(listedHashMap.get(number).getName() + "님의 게시글이 수정되었습니다.\n수정일시 : "  + updateTs);
@@ -195,7 +194,7 @@ public class BoardService {
                     newContent = contentCheck(sc, newContent);
                     listedHashMap.get(number).setContent(newContent);
 
-                    updateTs = updatedTs();
+                    updateTs = ts();
                     listedHashMap.get(number).setUpdatedTs(updateTs);
 
                     System.out.println(listedHashMap.get(number).getName() + "님의 게시글이 수정되었습니다.\n수정일시 : "  + updateTs);
@@ -219,7 +218,7 @@ public class BoardService {
             int deletedIndex = sc.nextInt();
             switch (deletedIndex) {
                 case 1:
-                    String deleteTs = deletedTs();
+                    String deleteTs = ts();
 
                     deleteHashMap.put(deleteHashMap.size() + 1, new Board(
                             listedHashMap.get(number).getTitle(),
@@ -277,22 +276,13 @@ public class BoardService {
         }
     }
 
-    //수정시간 등록을 위한 메소드
-    public String updatedTs() {
+    //시간 등록을 위한 메소드
+    public String ts() {
         SimpleDateFormat userFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
         Date time = new Date();
-        String userModificationDate = userFormat.format(time);
+        String ts = userFormat.format(time);
 
-        return userModificationDate;
-    }
-
-    //삭제시간 등록을 위한 메소드
-    public String deletedTs() {
-        SimpleDateFormat userFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-        Date time = new Date();
-        String userDeletenDate = userFormat.format(time);
-
-        return userDeletenDate;
+        return ts;
     }
 
     //게시글 내용 출력
