@@ -25,9 +25,86 @@
 
 
 # 6.핵심 기능
-- registered, searched, modified Method 호출시 Parameter 유효성 검증 Method
 
-유효성 검증 Method
+### 6.1 조회시 Pagination 기능 구현
+
+```java
+    //조회
+    public void listed() {
+        Scanner sc = new Scanner(System.in);
+        int limit = 3;
+        int offset;
+        int cnt = 0;
+
+        System.out.println("현재 페이지는 '1page'입니다.\n등록된 게시글의 수는 총 " + listedHashMap.size() + " 개 입니다. ");
+
+        //조회 메소드 실행시 출력되는 기본 list
+        for (int key : listedHashMap.keySet()) {
+            listPrint(key);
+            cnt++;
+
+            if(cnt == limit) {
+                break;
+            }
+        }
+
+        //게시글이 4개부터 실행되는 로직
+        if (listedHashMap.size() > limit) {
+            System.out.println("페이지 이동은 1번, 메뉴로 이동는 2번");
+            int switchNumber = sc.nextInt();
+
+            switch (switchNumber) {
+                case 1:
+                    System.out.print("이동 가능한 페이지 개수는 " + listedHashMap.size() / limit + "개 입니다. \n이동하실 page를 입력하세요\n ");
+                    int page = sc.nextInt();
+
+                    offset = limit * page - limit;
+                    cnt = 1;
+
+                    System.out.println("================================");
+                    System.out.println("현재 페이지는 " + page + "입니다");
+
+                    for (int key : listedHashMap.keySet()) {
+                        if(cnt > offset && cnt <= limit * page) {
+                            listPrint(key);
+                        }
+                        cnt++;
+                    }
+
+                    //추가 페이지 이동 여부 확인
+                    while (true) {
+                        System.out.println("추가적인 페이지이동 1번, 취소2번");
+
+                        if (sc.nextInt() == 1) {
+                            System.out.print("이동 가능한 페이지 개수는 " + listedHashMap.size() / limit + "개 입니다. \n이동하실 page를 입력하세요\n ");
+                            page = sc.nextInt();
+
+                            offset = limit * page - limit;
+                            cnt = 1;
+                            System.out.println("================================");
+                            System.out.println("현재 페이지는 " + page + "입니다");
+
+                            for (int key : listedHashMap.keySet()) {
+                                if(cnt > offset && cnt <= limit * page) {
+                                    listPrint(key);
+                                }
+                                cnt++;
+                            }
+                        } else {
+                            break;
+                        }
+                    }
+                    break;
+
+                default:
+                    System.out.println("취소 되었습니다");
+                    break;
+            }
+        }
+    }
+```
+
+### 6.1 registered, searched, modified Method 호출시 Parameter 유효성 검증 Method
 ```java
     //제목 유효성 검증
     public String titleCheck (Scanner sc, String title){
@@ -73,6 +150,12 @@
 
 
 조회시 return 받는 자료구조를 선택할때 고려 했던 조건이 있다. 등록할때 넣었던 자료가 출력시 순서를 유지 할 수 있는지, 수정 및 검색시 해당 게시글의 접근을 할 수 있는지에 대해 고민을 하다보니 모든 조건을 충족하는 ListHashMap을 사용 하게 되었다.
+
+
+
+등록된 게시글이 10개 이상 많아 진다고 가정 했을때 사용자에게 목록을 효율적으로 보여주기 위한 방법을 고민하다가 Pagination의 기능을 추가하게 되었다.
+사용자가 원하는 페이지의 목록을 보여주기 위해 로직을 구현했다. 처음 이동가능한 페이지 개수를 알려주며 사용자가 원하는 페이지를 입력받는다.<br>원하는 페이지의 목록을 보여주고, 추가적인 페이지 이동 여부를 물어본다. 있을시 위와 같은 방법으로 페이지 이동을 시켜주고 없을시 메인으로 이동 시켜준다. for문으로 Key를 반복시켜 데이터를 얻어오는 로직을 작성할때 시간이 좀 걸리긴 했지만 기초 알고리즘을 풀며
+학습했던 논리 구조들이 나름 큰 도움이 된것 같았다. 
 
 
 
