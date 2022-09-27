@@ -28,11 +28,11 @@
 - registered, searched, modified Method 호출시 Parameter 유효성 검증 Method
 
 유효성 검증 Method
-- titleCheck
+- titleCheck(Scanner sc, String tittle)
 - - title.length() <= 12
-- nameCheck
+- nameCheck(Scanner sc, String name)
 - - name.matches(isKoreanCheck) || name.matches(isAlaphaCheck)
-- contentCheck
+- contentCheck(Scanner sc, String content)
 - - content.length() <= 200
 # 7.회고
 프로젝트를 진행하며 외부 Class에서의 데이터 접근을 막기 위해 Class 멤버변수의 접근 제어자를 Private하게 관리하고 멤버 변수에 접근하기 위한 Getter와 Setter의 쓰임을 배웠다.
