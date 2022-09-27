@@ -28,12 +28,45 @@
 - registered, searched, modified Method 호출시 Parameter 유효성 검증 Method
 
 유효성 검증 Method
-- titleCheck(Scanner sc, String tittle)
-- - title.length() <= 12
-- nameCheck(Scanner sc, String name)
-- - name.matches(isKoreanCheck) || name.matches(isAlaphaCheck)
-- contentCheck(Scanner sc, String content)
-- - content.length() <= 200
+```java
+    //제목 유효성 검증
+    public String titleCheck (Scanner sc, String title){
+        if (title.length() <= 12) {
+            return title;
+        } else {
+            System.out.println("제목은 12글자 이하로 입력해야 합니다.\n다시 입력하세요.");
+            title = sc.nextLine();
+            return this.titleCheck(sc, title);
+        }
+    }
+    
+    //이름 유효성 검증
+    public String nameCheck (Scanner sc, String name){
+        String isKoreanCheck = "^[가-힣]*$";
+        String isAlaphaCheck = "^[a-zA-Z]*$";
+        if (name.matches(isKoreanCheck) || name.matches(isAlaphaCheck)) {
+            return name;
+        } else {
+            System.out.println("올바른 형식을 입력하세요\n한글 및 영어만 입력하세요.");
+            name = sc.nextLine();
+
+            return this.nameCheck(sc, name);
+        }
+    }
+    
+    //내용 유효성 검증
+    public String contentCheck (Scanner sc, String content){
+        if (content.length() <= 200) {
+            return content;
+        } else {
+            System.out.println("내용은 200자 이하로 작성할 수 있습니다.\n글자수에 맞게 다시 작성하세요");
+            content = sc.nextLine();
+
+            return this.contentCheck(sc, content);
+        }
+    }
+```
+
 # 7.회고
 프로젝트를 진행하며 외부 Class에서의 데이터 접근을 막기 위해 Class 멤버변수의 접근 제어자를 Private하게 관리하고 멤버 변수에 접근하기 위한 Getter와 Setter의 쓰임을 배웠다.
 이러한 과정을 통해 데이터를 안전하게 보호하기 위한 OOP의 캡슐화에 대한 개념을 명확하게 이해 할 수 있었다.
